@@ -103,3 +103,7 @@ STATIC_URL = "static/"
 
 # Default primary key field type
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
+import logging
+logger = logging.getLogger(__name__)
+
+logger.info(f"Database engine in use: {DATABASES['default']['ENGINE']}")
