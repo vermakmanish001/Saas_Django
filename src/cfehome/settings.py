@@ -46,7 +46,7 @@ SECRET_KEY = config("DJANGO_SECRET_KEY")
 # SECURITY WARNING: don't run with debug turned on in production!
 # DEBUG = str(os.environ.get("DJANGO_DEBUG")).lower() == "true"
 DEBUG = config("DJANGO_DEBUG", cast=bool)
-
+BASE_URL = config("BASE_URL", default=None)
 ALLOWED_HOSTS = [
     ".railway.app" # https://saas.prod.railway.app
 ]
@@ -69,6 +69,9 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     # my-apps
     "commando",
+    "customers",
+    "profiles",
+    "subscriptions",
     "visits",
     # third-party-apps
     "allauth_ui",
@@ -77,7 +80,7 @@ INSTALLED_APPS = [
     'allauth.socialaccount',
     'allauth.socialaccount.providers.github',
     "widget_tweaks",
-    
+    "slippers",
 ]
 
 MIDDLEWARE = [
@@ -136,7 +139,7 @@ if DATABASE_URL is not None:
         )
     }
 
-ALLAUTH_UI_THEME = "light"
+
 # Add these at the top of your settings.py
 # from os import getenv
 # from dotenv import load_dotenv
