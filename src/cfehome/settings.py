@@ -15,6 +15,8 @@ from pathlib import Path
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
+# Configure Gmail for Django Emails: https://www.codingforentrepreneurs.com/blog/sending-email-in-django-from-gmail/
+
 # Email config
 EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
 EMAIL_HOST = config("EMAIL_HOST", cast=str, default="smtp.gmail.com")
@@ -39,11 +41,11 @@ if all([ADMIN_USER_NAME, ADMIN_USER_EMAIL]):
 # See https://docs.djangoproject.com/en/5.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-
 SECRET_KEY = config("DJANGO_SECRET_KEY") 
+
 # SECURITY WARNING: don't run with debug turned on in production!
+# DEBUG = str(os.environ.get("DJANGO_DEBUG")).lower() == "true"
 DEBUG = config("DJANGO_DEBUG", cast=bool)
-print("DEBUG", DEBUG, type(DEBUG))
 
 ALLOWED_HOSTS = [
     ".railway.app" # https://saas.prod.railway.app
@@ -69,12 +71,11 @@ INSTALLED_APPS = [
     "commando",
     "visits",
     # third-party-apps
-    
     "allauth_ui",
     'allauth',
     'allauth.account',
     'allauth.socialaccount',
-    # 'allauth.socialaccount.providers.github',
+    'allauth.socialaccount.providers.github',
     "widget_tweaks",
     
 ]
@@ -135,6 +136,43 @@ if DATABASE_URL is not None:
         )
     }
 
+ALLAUTH_UI_THEME = "light"
+# Add these at the top of your settings.py
+# from os import getenv
+# from dotenv import load_dotenv
+
+# Replace the DATABASES section of your settings.py with this
+# DATABASES = {
+#   'default': {
+#     'ENGINE': 'django.db.backends.postgresql',
+#     'NAME': config('PGDATABASE'),
+#     'USER': config('PGUSER'),
+#     'PASSWORD': config('PGPASSWORD'),
+#     'HOST': config('PGHOST'),
+#     'PORT': config('PGPORT', 5432),
+#     'OPTIONS': {
+#       'sslmode': 'require',
+#     },
+#   }
+# }
+
+# Password validation
+# https://docs.djangoproject.com/en/5.0/ref/settings/#auth-password-validators
+
+AUTH_PASSWORD_VALIDATORS = [
+    {
+        "NAME": "django.contrib.auth.password_validation.UserAttributeSimilarityValidator",
+    },
+    {
+        "NAME": "django.contrib.auth.password_validation.MinimumLengthValidator",
+    },
+    {
+        "NAME": "django.contrib.auth.password_validation.CommonPasswordValidator",
+    },
+    {
+        "NAME": "django.contrib.auth.password_validation.NumericPasswordValidator",
+    },
+]
 
 # Django Allauth Config 
 LOGIN_REDIRECT_URL = "/"
@@ -158,25 +196,6 @@ SOCIALACCOUNT_PROVIDERS = {
         "VERIFIED_EMAIL": True
     }
 }
-
-
-# Password validation
-# https://docs.djangoproject.com/en/5.0/ref/settings/#auth-password-validators
-
-AUTH_PASSWORD_VALIDATORS = [
-    {
-        "NAME": "django.contrib.auth.password_validation.UserAttributeSimilarityValidator",
-    },
-    {
-        "NAME": "django.contrib.auth.password_validation.MinimumLengthValidator",
-    },
-    {
-        "NAME": "django.contrib.auth.password_validation.CommonPasswordValidator",
-    },
-    {
-        "NAME": "django.contrib.auth.password_validation.NumericPasswordValidator",
-    },
-]
 
 
 # Internationalization
@@ -207,6 +226,9 @@ STATICFILES_DIRS = [
 # output for python manage.py collectstatic 
 # local cdn
 STATIC_ROOT = BASE_DIR / "local-cdn"
+
+# < Django 4.2
+# STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
 
 STORAGES = {
     "staticfiles": {
