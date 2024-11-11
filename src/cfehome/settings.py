@@ -70,9 +70,12 @@ INSTALLED_APPS = [
     "visits",
     # third-party-apps
     
+    "allauth_ui",
     'allauth',
     'allauth.account',
     'allauth.socialaccount',
+    # 'allauth.socialaccount.providers.github',
+    "widget_tweaks",
     
 ]
 
